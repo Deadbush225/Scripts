@@ -1,0 +1,1 @@
+start "" "D:\System\Scripts\Text Operations.exe"
