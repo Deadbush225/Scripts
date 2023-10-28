@@ -3,136 +3,114 @@
 ;Persistent True
 DetectHiddenWindows True
 
+; =============================== Run as Admin =============================== ;
+
 SetWorkingDir A_ScriptDir
-;if not A_IsAdmin
-;	Run '*RunAs "' A_ScriptFullPath '" /restart' ; (A_AhkPath is usually optional if the script has the .ahk extension.) You would typically check  first.
 
 if (not A_IsAdmin) {
 	;	MsgBox("Not admin")
 	;	MsgBox(A_ScriptFullPath)
 	Run '*RunAs "' A_ScriptFullPath '" /restart'
 } else if (A_IsAdmin) {
-	;	MsgBox("Admin")
-	;	MsgBox(A_ScriptFullPath)
-	;Run '*RunAs "' A_ScriptFullPath '" /restart'
+    ; Do nothing, already admin
 }
+
+; ============================= Global Variables ============================= ;
 
 Todo_HWND := 0 
-isKeepOnTop := False
 
-thirty_10sec := 0
+; =============================== TWM Functions ============================== ;
 
-runToDo() {
+TWM_StartToDo() {
     RunWait("Run Todo.exe")
-    ; sleep 1000
     
     global Todo_HWND := Integer(IniRead("latest_hwnd.ini", "Latest hWnd", "hWnd"))
-
-    ; MsgBox("Read Hwnd: " . Todo_HWND)
-
-    ; WinSetAlwaysOnTop(0, Todo_HWND)
-    ; WinSetExStyle("+0x80", Todo_HWND)
 }
 
-; disolve this function as it seemed to be a redundancy
-; validateHWND() {
-;     if ((!WinExist(Todo_HWND)) || (Todo_HWND != 0)) {
-;         runToDo()
-;     }
-; }
 
-HideToDo() {
+TWM_HideToDo() {
     WinHide Todo_HWND
 }
 
-ShowToDo(*) {
+TWM_ShowToDo(*) {
     WinShow Todo_HWND
 }
 
-KeepontopToDo() {
-; Screen:   x: 1043	y: 326	w: 398	h: 546
-; Client:	x: 1051	y: 326	w: 382	h: 538
+TWM_KeepontopToDo() {
+; Screen:	x: 1037	y: 319	w: 398	h: 546
+; Client:	x: 1045	y: 319	w: 382	h: 538
 
+    WinMove(1037, 319, 398, 546, Todo_HWND)
 
-    WinMove(1043, 326, 398, 546, Todo_HWND)
-    ; global isKeepOnTop := True
-    ; ShowToDo()
-
-    ; Sleep 250
-    ; WinActivate Todo_HWND
-    ; Send "!{Up}"
-
-    ; ; double check if a window intercepts
-    ; Sleep 250
-    ; WinActivate Todo_HWND
-    ; Send "!{Up}"
-
-    ; ; Sleep 750
-    ; ; WinActivate Todo_HWND
-    ; ; Send "!{Up}"
-
-    ; Sleep 250
-    ; PositionToDo()
-    
-    ; Sleep 250
-    ; PositionToDo()
-    
-    ; ; final safe play
-    ; ; Sleep 750
-    ; ; PositionToDo()
+    WinSetAlwaysOnTop(1, Todo_HWND)
 }
 
-PositionToDo(*) {
+TWM_PositionToDo(*) {
     ; Sleep 1000
     WinActivate Todo_HWND
-    WinMove(925, 410, ,, Todo_HWND)
+    WinMove(1037, 319, 398, 546, Todo_HWND)
 }
 
-ExitSc(*) {
+TWM_ExitSc(*) {
     if WinExist(Todo_HWND) {
-        ShowToDo()
+        TWM_ShowToDo()
     }
     ExitApp
 }
 
-ToDoWindowCheck() {
+TWM_WinExist() {
+    return WinExist(Todo_HWND)
+}
+
+/**
+ * 
+ * @param {number} visibilityMode
+ *      - 0: Check then, just show the window
+ *      - 1: Check then, toggle the visibility
+ */
+TWM_ToDoWindowCheck(visibilityMode := 0) {
+    
     ; serves also as a safeguard in case the last open before shutdown
-    if (WinExist(Todo_HWND) && Todo_HWND != 0) {
-        ; MsgBox "Window already exist, showing the instance: " . Todo_HWND , ,2000
-        ShowToDo()
+    if (TWM_WinExist() && Todo_HWND != 0) {
+        if (visibilityMode == 0) {
+            TWM_ShowToDo()
+        } else if (visibilityMode == 1) {
+            if TWM_TodoisVisible() {
+                TWM_HideToDo()
+            } else {
+                TWM_ShowToDo()
+            }
+        }
     } else {
-        ; MsgBox "Window doesn't exist, running new instance: " . Todo_HWND , ,2000
-        runToDo()
-        ; MsgBox()
-        ; validateHWND()
+        TWM_StartToDo()
     }
 }
 
-TodoisVisible() {
-    ; MsgBox WinGetStyle(Todo_HWND)
-    ; MsgBox WinGetExStyle(Todo_HWND)
+TWM_TodoisVisible() {
     return (WinGetStyle(Todo_HWND) & 0x10000000) > 0
 }
 
-ToggleVisibility() {
-    ; ToDoWindowCheck()
-    ; KeepontopToDo()
-    ; MsgBox TodoisVisible()
-    if TodoisVisible() {
-        HideToDo()
-    } else {
-        ShowToDo()
-    }
-}
+; TWM_ToggleVisibility() {
+;     ; try to add safeguard to check if Spotify is running
+;     if TWM_WinExist() {
+;         if TWM_TodoisVisible() {
+;             TWM_HideToDo()
+;         } else {
+;             TWM_ShowToDo()
+;         }
+;     } else {
+;         TWM_StartToDo()
+;     }
+; }
 
-Watcher() {
+TWM_Watcher() {
     ; add an additional check if window is just hidden
     if !(WinExist(Todo_HWND)) {
         res := MsgBox("Hey! To do is exited, do you want to open it [yes] or exit the script [no]", , 4)
 
         if (res == "Yes") {
-            runToDo()
-            KeepontopToDo()
+            TWM_StartToDo()
+            TWM_KeepontopToDo()
         }
         else if (res == "No") {
             ; continue
@@ -141,54 +119,87 @@ Watcher() {
     }
 }
 
-; LateLoginMinimizer() {
-;     if !(isKeepOnTop) {
-;         ToDoWindowCheck()
-;         KeepontopToDo()
-;     }
-; }
-
-main() {
-
-    ; start-up delay
-    ; sleep(20000)
-
+TWM_main() {
     systray := A_TrayMenu
     
     systray.Delete()
-    systray.Add("Show To Do", ShowToDo)
-    systray.Add("Position To Do", PositionToDo)
-    systray.Add("Exit", ExitSc)
+    systray.Add("Show To Do", TWM_ShowToDo)
+    systray.Add("Position To Do", TWM_PositionToDo)
+    systray.Add("Exit", TWM_ExitSc)
 
-    ;load previous hwnd
+    systray.Default := "Show To Do"
+    
+    global t_pressed := 0
+
+    ; load previous hwnd
     global Todo_HWND := Integer(IniRead("latest_hwnd.ini", "Latest hWnd", "hWnd"))
 
-    ; run to do if it doesn't exist
-    ; if WinExist("Microsoft To Do")
-        ; MsgBox "Window Already Exists"
+    TWM_ToDoWindowCheck()
+    TWM_KeepontopToDo()
 
-    ToDoWindowCheck()
-    KeepontopToDo()
-
-    ; SetTimer Watcher, 60000 ; Check every 1 min
-    ; SetTimer LateLoginMinimizer, 10000 ; Check every 5 mins
-    SetTimer Watcher, 300000 ; Check every 5 mins
+    SetTimer TWM_Watcher, 300000 ; Check every 5 mins
 
 }
 
-Numpad0 & Numpad2::{
+; ================================== Hotkeys ================================= ;
+/**
+ * Just incase you won't be able to use this methodology, you can just create a 
+ * separate hotkey when RShift + t is pressed, then it will set a value to a 
+ * variable that the inner hotkeys (RShift + v, RShift + p) will check if the 
+ * variable's current value is "pressed". You need to create a separate hotkey 
+ * when RShift + t is up, so you can reset the value of the variable
+ */
+
+>+t::{
+    global t_pressed := 1
+}
+>+t UP::{
+    global t_pressed := 0
+}
+
+; #HotIf GetKeyState("RShift") && GetKeyState("t", "P") 
+>+v::{
+    global t_pressed
+
+    if (not t_pressed) {
+        return
+    }
+    
     try {
-        ToggleVisibility()
-    } Catch Error as err{
-        MsgBox Format("{1}: {2}.`n`nFile:`t{3}`nLine:`t{4}`nWhat:`t{5}`nStack:`n{6} `n`nhWnd: {7}"
-        , type(err), err.Message, err.File, err.Line, err.What, err.Stack, Todo_HWND) 
+        TWM_ToDoWindowCheck(1)
+    } Catch Error as err {
+        TWM_ToDoErrorReporter(err)
     }
 }
 
+; #HotIf GetKeyState("RShift") && GetKeyState("t", "P") 
+>+p::{   
+    if (not t_pressed) {
+        return
+    }
+    
+    TWM_PositionToDo()
+}
+
+; =================================== Main =================================== ;
 try {
-    main()
+    TWM_main()
 }
 Catch Error as err {
+    TWM_ToDoErrorReporter(err) 
+}
+
+TWM_ToDoErrorReporter(err) {
     MsgBox Format("{1}: {2}.`n`nFile:`t{3}`nLine:`t{4}`nWhat:`t{5}`nStack:`n{6} `n`nhWnd: {7}"
         , type(err), err.Message, err.File, err.Line, err.What, err.Stack, Todo_HWND)
+    TWM_ToDoWindowCheck()
 }
+
+; =========================== Disable Outer Hotkey =========================== ;
+
+; >+t::{
+; }
+
+; ================================= OnMessage ================================ ;
+
+OnMessage(0x5555, TWM_ShowToDo) ; Show spotify

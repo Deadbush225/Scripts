@@ -1,13 +1,17 @@
+#Requires AutoHotkey v2.0
+
 SetWorkingDir A_ScriptDir
-if not A_IsAdmin
+if not A_IsAdmin{
 	Run '*RunAs "' A_ScriptFullPath '" /restart' ; (A_AhkPath is usually optional if the script has the .ahk extension.) You would typically check  first.
+}
+
+; ============================= Helper Functions ============================= ;
 
 !v::{
 	A_Clipboard := removeNewline(A_Clipboard)
 	Send("^v")
 }
 
-; +++ HELPER FUNCTIONS +++
 removeDoubleSpace(word) {
 	; count := 0
 	Loop 
@@ -31,7 +35,7 @@ clearClipBoard() {
 
 clipboard_timeout := -2000
 
-; +++ HOTKEYS +++
+; ================================== Hotkeys ================================= ;
 
 ; Remove newline in selection, Necessarily converting it to oneline
 ; NumpadDot & o::
@@ -223,7 +227,7 @@ NumpadDot & e::{
 	Send("{End}{ShiftDown}{Home}{ShiftUp}{Del}{BackSpace}{Down}")
 }
 
-; +++ HEADERS +++
+; ================================== Headers ================================= ;
 ; transform numbered list to heading
 
 NumpadDot & Numpad1::
@@ -262,7 +266,7 @@ NumpadDot & 6::{
 	Send "{End}"
 }
 
-; +++ COLEMAK LAYOUT +++
+; ============================== Colemak layout ============================== ;
 
 ; *`;::Send "{Blind}o"
 ; *d::Send "{Blind}s"
@@ -288,5 +292,3 @@ NumpadDot & 6::{
 ; *y::Send "{Blind}j"
 ; CapsLock::BackSpace
 ; RCtrl::CapsLock
-
-; --- COLEMAK LAYOUT ---
