@@ -34,19 +34,31 @@ BR_EnableBackSpaceRemap() {
 	Hotkey("RShift & 2", "On")
 }
 
-BR_StartBackspaceRemap() {
-	Hotkey("CapsLock", "Backspace")
-	Hotkey("RCtrl", "CapsLock")
+; BR_StartBackspaceRemap() {
+; 	Hotkey("CapsLock", "Backspace")
+; 	Hotkey("RShift & Insert", "CapsLock")
 
-	Hotkey("PgUp", "Home")
-	Hotkey("PgDn", "End")
+; 	Hotkey("PgUp", "Home")
+; 	Hotkey("PgDn", "End")
 
-	Hotkey("RShift & 1", SendInput("``"))
-	Hotkey("RShift & 2", "~")
-}
+; 	Hotkey("RShift & 1", SendInput("``"))
+; 	Hotkey("RShift & 2", "~")
+; }
+
+CapsLock::BackSpace
+
+RShift & Insert::CapsLock
+
+PgUp::Home
+
+PgDn::End
+
+RShift & 1::SendInput("``")
+
+RShift & 2::~
 
 ; =================================== Main =================================== ;
-BR_StartBackspaceRemap()
+; BR_StartBackspaceRemap()
 
 ; ================================== Hotkeys ================================= ;
 b_press := 0
@@ -67,4 +79,4 @@ RShift & b UP::{
 
 ; ================================= OnMessage ================================ ;
 
-OnMessage(0x5555, BR_EnableBackSpaceRemap) ; Show spotify
+; OnMessage(0x5555, BR_EnableBackSpaceRemap) ; Show spotify

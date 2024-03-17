@@ -24,6 +24,12 @@ removeDoubleSpace(word) {
 	return word	
 }
 
+!r::{
+    Send("^c")
+    A_Clipboard := removeDoubleSpace(A_Clipboard)
+	Send("^v")
+}
+
 removeNewline(word) {
 	return removeDoubleSpace(RegExReplace(word, "(\n|\r\n)", " "))
 }
@@ -34,6 +40,8 @@ clearClipBoard() {
 }
 
 clipboard_timeout := -2000
+
+
 
 ; ================================== Hotkeys ================================= ;
 
@@ -292,3 +300,5 @@ NumpadDot & 6::{
 ; *y::Send "{Blind}j"
 ; CapsLock::BackSpace
 ; RCtrl::CapsLock
+
+

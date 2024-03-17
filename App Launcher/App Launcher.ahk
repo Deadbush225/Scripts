@@ -12,23 +12,36 @@ DetectHiddenWindows 1
 
 ; ================================ Auto Start ================================ ;
 StartPrograms() {
-    Run("D:\System\Scripts\Text Operations\Text Operations.exe")
-    Sleep(1500)
-    Run("D:\System\Scripts\Backspace Remap\Backspace Remap.exe")
-    Sleep(1500)
-    Run("D:\System\Scripts\Hide and Show Microsoft To-do\Todo Window Manager.exe")
-    Sleep(1500)
-    Run("D:\System\Programs\Linkbar\Linkbar_1_6_9\Linkbar.exe")
-    Sleep(1500)
-    Run("C:\Program Files\Portals\Portals.exe")
-    Sleep(1500)
+    if (not WinExist("Text Operations")) {
+        Run("D:\System\Scripts\Text Operations\Text Operations.exe")
+        Sleep(1500)
+    }
+    
+    if (not WinExist("Backspace Remap")) {
+        Run("D:\System\Scripts\Backspace Remap\Backspace Remap.exe")
+        Sleep(1500)
+    }
+
+    if (not WinExist("Todo Window Manager.exe")) {
+        Run("D:\System\Scripts\Hide and Show Microsoft To-do\Todo Window Manager.exe")
+        Sleep(1500)
+    }
+
+    ; if (not WinExist("Linkbar.exe")) {
+    ;     Run("D:\System\Programs\Linkbar\Linkbar_1_6_9\Linkbar.exe")
+    ;     Sleep(1500)
+    ; }
+
+    ; if (not WinExist("Portals.exe")) {
+    ;     Run("C:\Program Files\Portals\Portals.exe")
+    ;     Sleep(1500)
+    ; }
 }
 
-; StartPrograms()
 
 ; ============================= Conditional Start ============================ ;
 AL_RunSpotify(*) {
-    MsgBox("Running Spotify")
+    ; MsgBox("Running Spotify")
     
     spotify_exist := WinExist("Spotify Window Manager.exe")
     
@@ -45,7 +58,7 @@ AL_RunSpotify(*) {
 }
 
 AL_RunTodo(*) {
-    MsgBox("Running Todo")
+    ; MsgBox("Running Todo")
     
     todo_exist := WinExist("Todo Window Manager.exe")
     
@@ -104,7 +117,7 @@ AL_main() {
     systray.Add("Exit", Ex)
     
     ; systray.Add("Exit", ExitSc)
-
+    StartPrograms()
     ; OnExit(BeforeExit)
 }
 
@@ -125,7 +138,7 @@ AL_main() {
 ; #HotIf GetKeyState("RShift") && GetKeyState("a", "P")
 >+s::{
     global a_pressed
-    MsgBox("AL: RShift + s : " a_pressed)
+    ; MsgBox("AL: RShift + s : " a_pressed)
     
     ; MsgBox(a_pressed)
     
@@ -134,7 +147,7 @@ AL_main() {
         return
     }
     
-    MsgBox("AL: Running Spotify")
+    ; MsgBox("AL: Running Spotify")
     AL_RunSpotify()
 }
 

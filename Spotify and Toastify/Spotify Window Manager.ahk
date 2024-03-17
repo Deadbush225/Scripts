@@ -57,11 +57,11 @@ SWM_ToggleVisibility(*) {
 SWM_SpotifyWindowCheck() {
     ; serves as a safeguard incase Spotify is already open
 
-    MsgBox("Spotify: " WinExist(Spotify_HWND) " : " (Spotify_HWND != 0))
+    ; MsgBox("Spotify: " WinExist(Spotify_HWND) " : " (Spotify_HWND != 0))
 
     spotify_exists := WinExist(Spotify_HWND) && (Spotify_HWND != 0)
     
-    MsgBox("Toastify: " ProcessExist("Toastify.exe"))
+    ; MsgBox("Toastify: " ProcessExist("Toastify.exe"))
     toastify_exists := ProcessExist("Toastify.exe")
     
     SWM_StartPrograms(!spotify_exists, !toastify_exists)
@@ -72,7 +72,7 @@ SWM_SpotifyWindowCheck() {
 }
 
 SWM_ShowSpotify(*) {
-    MsgBox("Showing Spotify")
+    ; MsgBox("Showing Spotify")
 
     WinShow Spotify_HWND
 }

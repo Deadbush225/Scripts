@@ -45,8 +45,18 @@ TWM_KeepontopToDo() {
     WinSetAlwaysOnTop(1, Todo_HWND)
 }
 
+TWM_HWND_Modifier() {
+    if (WinGetTitle(Todo_HWND) == "Microsoft To Do" ) {
+        MsgBox "HWND Verified"        
+    } else {
+        MsgBox "HWND Mismatch"
+        TWM_StartToDo()
+    }
+}
+
 TWM_PositionToDo(*) {
     ; Sleep 1000
+
     WinActivate Todo_HWND
     WinMove(1037, 319, 398, 546, Todo_HWND)
 }
