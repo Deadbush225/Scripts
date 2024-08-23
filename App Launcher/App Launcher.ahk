@@ -10,36 +10,55 @@ DetectHiddenWindows 1
 
 ; compressing to one executable isn't that practical, it is preferable to use standalone scripts for a particular program
 
-; ================================ Auto Start ================================ ;
+; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Delayed Auto Start ━━━━━━━━━━━━━━━━━━━━━━━━━━━ ;
 StartPrograms() {
     if (not WinExist("Text Operations")) {
         Run("D:\System\Scripts\Text Operations\Text Operations.exe")
-        Sleep(1500)
+        Sleep(2500)
     }
     
     if (not WinExist("Backspace Remap")) {
         Run("D:\System\Scripts\Backspace Remap\Backspace Remap.exe")
-        Sleep(1500)
+        Sleep(2500)
     }
 
-    if (not WinExist("Todo Window Manager.exe")) {
-        Run("D:\System\Scripts\Hide and Show Microsoft To-do\Todo Window Manager.exe")
-        Sleep(1500)
-    }
+    ; if (not WinExist("Todo Window Manager.exe")) {
+    ;     Run("D:\System\Scripts\Hide and Show Microsoft To-do\Todo Window Manager.exe")
+    ;     Sleep(2500)
+    ; }
+	 
+	if (not WinExist("ahk_exe Obsidian.exe")) {
+		Run("C:\Users\Eliaz\AppData\Local\Obsidian\Obsidian.exe")
+		Sleep(2500)
+	}
 
     ; if (not WinExist("Linkbar.exe")) {
     ;     Run("D:\System\Programs\Linkbar\Linkbar_1_6_9\Linkbar.exe")
-    ;     Sleep(1500)
+    ;     Sleep(2500)
     ; }
 
-    ; if (not WinExist("Portals.exe")) {
-    ;     Run("C:\Program Files\Portals\Portals.exe")
-    ;     Sleep(1500)
-    ; }
+    if (not WinExist("Portals.exe")) {
+        Run("C:\Program Files\Portals\Portals.exe")
+        Sleep(2500)
+    }
 }
 
-
 ; ============================= Conditional Start ============================ ;
+AL_RunObsidian(*) {
+	obsidian_exist := WinExist("ahk_exe Obsidian.exe")
+    
+    if not obsidian_exist {
+		Run("C:\Users\Eliaz\AppData\Local\Obsidian\Obsidian.exe")
+    } else if obsidian_exist {
+        ; MsgBox("Spotify exist, opening...")
+        PostMessage(0x5555) ; show spotify
+        ; Send("{RShift Down}sv")
+        ; Sleep(500)
+        ; Send("{RShift Up}")
+        ; - run short cut for showing spotify (Spotify Window Manager)
+    }
+}
+
 AL_RunSpotify(*) {
     ; MsgBox("Running Spotify")
     
@@ -99,6 +118,20 @@ AL_RunTextOperations(*) {
     }
 }
 
+AL_RunPortals(*) {
+    if (not WinExist("Portals.exe")) {
+        Run("C:\Program Files\Portals\Portals.exe")
+        Sleep(1500)
+    }
+}
+
+; AL_RunEpsonScann(*) {
+;     if (not WinExist("Portals.exe")) {
+;         Run("C:\Program Files\Portals\Portals.exe")
+;         Sleep(1500)
+;     }
+; }
+
 Ex(*) {
     ExitApp()
 }
@@ -111,9 +144,11 @@ AL_main() {
     systray.Delete()
     systray.Add("Run `"Spotify`"", AL_RunSpotify)
     systray.Add("Run `"Todo`"", AL_RunTodo)
-    ; systray.Add("Run `"Backspace Remap`"", AL_RunBackspaceRemap)
+    systray.Add("Run `"Backspace Remap`"", AL_RunBackspaceRemap)
     systray.Add("Run `"Peace`"", AL_RunPeace)
     systray.Add("Run `"Text Operations`"", AL_RunTextOperations)
+    systray.Add("Run `"Portals`"", AL_RunPortals)
+    ; systray.Add("Run `"Epson Scan`"", AL_RunEpsonScan)
     systray.Add("Exit", Ex)
     
     ; systray.Add("Exit", ExitSc)

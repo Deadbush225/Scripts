@@ -67,8 +67,8 @@ TWM_StartToDo() {
 
 
 TWM_HideToDo() {
-    WinHide Todo_HWND
-    ; WinMinimize Todo_HWND
+    ; WinHide Todo_HWND
+    WinMinimize Todo_HWND
     
     ; tbl := TaskbarList()
 
@@ -80,8 +80,8 @@ TWM_HideToDo() {
 }
 
 TWM_ShowToDo(*) {
-    WinShow Todo_HWND
-    ; WinRestore Todo_HWND
+    ; WinShow Todo_HWND
+    WinRestore Todo_HWND
 }
 
 TWM_KeepontopToDo() {
@@ -147,7 +147,10 @@ TWM_ToDoWindowCheck(visibilityMode := 0) {
 }
 
 TWM_TodoisVisible() {
-    return (WinGetStyle(Todo_HWND) & 0x10000000) > 0
+    red := (WinGetMinMax(Todo_HWND) =! 1)
+    ; MsgBox(red)
+    return red
+    ; return (WinGetStyle(Todo_HWND) & 0x10000000) > 0
 }
 
 ; TWM_ToggleVisibility() {
@@ -218,15 +221,16 @@ TWM_main() {
 
 global t_pressed
 
->+t::{
+~>+t::{
     global t_pressed := 1
 }
->+t UP::{
+~>+t UP::{
     global t_pressed := 0
 }
 
 ; #HotIf GetKeyState("RShift") && GetKeyState("t", "P") 
->+v::{
+~>+v::{
+    ; BLOCK V
     global t_pressed
 
     if (not t_pressed) {
@@ -241,7 +245,7 @@ global t_pressed
 }
 
 ; #HotIf GetKeyState("RShift") && GetKeyState("t", "P") 
->+p::{   
+~>+p::{   
     if (not t_pressed) {
         return
     }

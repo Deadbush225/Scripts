@@ -16,19 +16,24 @@ Flags:
 
 # Must be the first statement in your script (not counting comments)
 param(
+    [string]$ScriptPath = $pwd,
     [string]$C = "CR",
-    [switch]$L
-    ) 
+    [switch]$L,
+    [switch]$AddIcon=false
+)
 
-$scriptName = "Spotify Window Manager"
+$ScriptPath = Get-Item $ScriptPath
+
+$scriptFolder = $ScriptPath.FullName
+$scriptName = $ScriptPath.Name # "Spotify Window Manager"
+$ScriptPathWOExtension = $scriptFolder + "\" + $scriptName
     
 $processOptions = @{
-    FilePath = "ahk2exe.exe"
-    ArgumentList = '/in ".\' + $scriptName + '.ahk" /out ".\' + $scriptName + '.exe" /icon ".\' + $scriptName + '.ico"'
+    FilePath     = "ahk2exe.exe"
+    ArgumentList = '/in ".\' + $ScriptPathWOExtension + '.ahk' + '/out ".\' + $ScriptPathWOExtension + '.exe"' +  ( $AddIcon ? (' /icon ".\' + $ScriptPathWOExtension + '.ico"') : "")
 }
 
-
-$iterations = if ($L) {100} else {1};
+$iterations = if ($L) { 100 } else { 1 };
 
 for ($i = 0; $i -lt $iterations; $i++) {
     try {
@@ -50,7 +55,7 @@ for ($i = 0; $i -lt $iterations; $i++) {
         Start-Process -FilePath $scriptName".exe"
     }
 
-    if (($iterations - 1) -eq $i){
+    if (($iterations - 1) -eq $i) {
         # Write-Output("Command ran")
         Exit
     }
@@ -68,9 +73,8 @@ for ($i = 0; $i -lt $iterations; $i++) {
 
     $result = $host.ui.PromptForChoice($title, $message, $options, 0)
 
-    switch ($result)
-        {
-            0 {continue}
-            1 {Exit}
-        }
+    switch ($result) {
+        0 { continue }
+        1 { Exit }
+    }
 }

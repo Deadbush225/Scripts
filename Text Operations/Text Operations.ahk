@@ -9,7 +9,15 @@ if not A_IsAdmin{
 
 !v::{
 	A_Clipboard := removeNewline(A_Clipboard)
+	; MsgBox(te)
+	; A_Clipboard := te
+	ClipWait(2)
 	Send("^v")
+}
+
+~s & v::{
+	Send("^c")
+	Send("!v")
 }
 
 removeDoubleSpace(word) {
@@ -26,7 +34,9 @@ removeDoubleSpace(word) {
 
 !r::{
     Send("^c")
-    A_Clipboard := removeDoubleSpace(A_Clipboard)
+    te := removeDoubleSpace(A_Clipboard)
+	MsgBox(te)
+	A_Clipboard := te
 	Send("^v")
 }
 
@@ -44,6 +54,15 @@ clipboard_timeout := -2000
 
 
 ; ================================== Hotkeys ================================= ;
+
+global q_pressed
+
+>+q::{
+    global q_pressed := 1
+}
+>+q UP::{
+    global q_pressed := 0
+}
 
 ; Remove newline in selection, Necessarily converting it to oneline
 ; NumpadDot & o::
@@ -173,7 +192,11 @@ NumpadDot & t::{
 
 ; lowercase
 ; NumpadDot & l::
-NumpadDot & i::{
+>+i::{
+	if (not q_pressed) {
+		return
+	}
+
 	A_Clipboard := ""
 	Send("^c")
 	
@@ -187,7 +210,11 @@ NumpadDot & i::{
 
 ; uppercase
 ; NumpadDot & u::
-NumpadDot & l::{
+>+l::{
+	if (not q_pressed) {
+		return
+	}
+		 		 
 	A_Clipboard := ""
 	Send("^c")
 	
@@ -201,7 +228,11 @@ NumpadDot & l::{
 
 ; Sentence Case
 ; NumpadDot & s::
-NumpadDot & r::{
+>+r::{
+	if (not q_pressed) {
+		return
+	}
+
 	A_Clipboard := ""
 	Send("^c")
 	
@@ -227,7 +258,6 @@ NumpadDot & g::{
 	
 	SetTimer(clearClipBoard, clipboard_timeout)
 }
-
 
 ; delete lines
 ; NumpadDot & k::
