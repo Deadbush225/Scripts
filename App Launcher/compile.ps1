@@ -23,7 +23,7 @@ param(
 $scriptName = "App Launcher"
     
 $processOptions = @{
-    FilePath = "ahk2exe.exe"
+    FilePath = "Ahk2Exe.exe"
     ArgumentList = '/in ".\' + $scriptName + '.ahk" /out ".\' + $scriptName + '.exe"' # /icon ".\' + $scriptName + '.ico"'
 }
 

@@ -13,34 +13,34 @@ DetectHiddenWindows 1
 ; ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Delayed Auto Start ━━━━━━━━━━━━━━━━━━━━━━━━━━━ ;
 StartPrograms() {
     if (not WinExist("Text Operations")) {
-        Run("D:\System\Scripts\Text Operations\Text Operations.exe")
+        Run("C:\System\Scripts\Text Operations\Text Operations.exe")
         Sleep(2500)
     }
     
     if (not WinExist("Backspace Remap")) {
-        Run("D:\System\Scripts\Backspace Remap\Backspace Remap.exe")
+        Run("C:\System\Scripts\Backspace Remap\Backspace Remap.exe")
         Sleep(2500)
     }
 
     ; if (not WinExist("Todo Window Manager.exe")) {
-    ;     Run("D:\System\Scripts\Hide and Show Microsoft To-do\Todo Window Manager.exe")
+    ;     Run("C:\System\Scripts\Hide and Show Microsoft To-do\Todo Window Manager.exe")
     ;     Sleep(2500)
     ; }
 	 
 	if (not WinExist("ahk_exe Obsidian.exe")) {
-		Run("C:\Users\Eliaz\AppData\Local\Obsidian\Obsidian.exe")
+		Run("C:\Program Files\Obsidian\Obsidian.exe")
 		Sleep(2500)
 	}
 
     ; if (not WinExist("Linkbar.exe")) {
-    ;     Run("D:\System\Programs\Linkbar\Linkbar_1_6_9\Linkbar.exe")
+    ;     Run("C:\System\Programs\Linkbar\Linkbar_1_6_9\Linkbar.exe")
     ;     Sleep(2500)
     ; }
 
-    if (not WinExist("Portals.exe")) {
-        Run("C:\Program Files\Portals\Portals.exe")
-        Sleep(2500)
-    }
+    ; if (not WinExist("Portals.exe")) {
+    ;     Run("C:\Program Files\Portals\Portals.exe")
+    ;     Sleep(2500)
+    ; }
 }
 
 ; ============================= Conditional Start ============================ ;
@@ -65,7 +65,7 @@ AL_RunSpotify(*) {
     spotify_exist := WinExist("Spotify Window Manager.exe")
     
     if not spotify_exist {
-        Run("D:\System\Scripts\Spotify and Toastify\Spotify Window Manager.exe")
+        Run("C:\System\Scripts\Spotify and Toastify\Spotify Window Manager.exe")
     } else if spotify_exist {
         ; MsgBox("Spotify exist, opening...")
         PostMessage(0x5555) ; show spotify
@@ -82,7 +82,7 @@ AL_RunTodo(*) {
     todo_exist := WinExist("Todo Window Manager.exe")
     
     if not todo_exist {
-        Run("D:\System\Scripts\Hide and Show Microsoft To-do\Todo Window Manager.exe")
+        Run("C:\System\Scripts\Hide and Show Microsoft To-do\Todo Window Manager.exe")
     } else if todo_exist {
         ; MsgBox("Todo exist, opening...")
         PostMessage(0x5555) ; show todo
@@ -95,7 +95,7 @@ AL_RunBackspaceRemap(*) {
     br_exist := WinExist("Backspace Remap.exe")
     
     if not br_exist {
-        Run("D:\System\Scripts\Backspace Remap\Backspace Remap.exe")
+        Run("C:\System\Scripts\Backspace Remap\Backspace Remap.exe")
     } else if br_exist {
         ; MsgBox("Todo exist, opening...")
         PostMessage(0x5555) ; enable backspace remap

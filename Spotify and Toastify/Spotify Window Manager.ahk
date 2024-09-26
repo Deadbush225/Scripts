@@ -36,7 +36,12 @@ SWM_ToggleVisibility(*) {
     ; MsgBox "Spotify_HWND"
     
     if !SWM_SpotifyIsThere() {
+        ; MsgBox("Fresh launch")
         SWM_StartPrograms()
+    }
+    
+    if !SWM_ToastifyIsThere() {
+        SWM_StartPrograms(false, true)
     }
 
     if SWM_SpotityisVisible(){
@@ -46,6 +51,9 @@ SWM_ToggleVisibility(*) {
         WinWait Spotify_HWND
         WinActivate Spotify_HWND
     }
+
+    ; Show the Spotify Winndow first then check if toastify is present
+    ; SWM_SpotifyWindowCheck()
 }
 
 ; =============================== SWM Functions ============================== ;
@@ -54,13 +62,14 @@ SWM_StartPrograms(Run_Spotify := true, Run_Toastify := true) {
     ; MsgBox(Run_Spotify " : " Run_Toastify)
     
     if (Run_Spotify) {
-        Run "Spotify.lnk" ; ; &Spotify_HWND
-        Sleep 3000
+        Run("C:\Users\Administrator\AppData\Roaming\Spotify\Spotify.exe") ; ; &Spotify_HWND
+        ; Sleep 3000
     }
     
     if (Run_Toastify) {
-        Run "Toastify.lnk"
-        Sleep 1000
+        ; Run(A_ScriptDir "/Toastify.lnk")
+        Run("C:\Program Files\Toastify\Toastify.exe")
+        ; Sleep 1000
     }
     
     ; global Spotify_HWND := WinGetID("ahk_exe Spotify.exe")
