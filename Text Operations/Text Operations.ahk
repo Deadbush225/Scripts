@@ -306,6 +306,8 @@ NumpadDot & 6::{
 
 ; ============================== Colemak layout ============================== ;
 
+~RCtrl & RShift::CapsLock
+
 ; *`;::Send "{Blind}o"
 ; *d::Send "{Blind}s"
 ; *e::Send "{Blind}f"
