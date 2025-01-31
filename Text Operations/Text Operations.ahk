@@ -5,7 +5,7 @@ if not A_IsAdmin{
 	Run '*RunAs "' A_ScriptFullPath '" /restart' ; (A_AhkPath is usually optional if the script has the .ahk extension.) You would typically check  first.
 }
 
-; ============================= Helper Functions ============================= ;
+; ======================== Helper Functions ======================== ;
 
 !v::{
 	A_Clipboard := removeNewline(A_Clipboard)
@@ -53,7 +53,7 @@ clipboard_timeout := -2000
 
 
 
-; ================================== Hotkeys ================================= ;
+; ============================= Hotkeys ============================ ;
 
 global q_pressed
 
@@ -265,7 +265,7 @@ NumpadDot & e::{
 	Send("{End}{ShiftDown}{Home}{ShiftUp}{Del}{BackSpace}{Down}")
 }
 
-; ================================== Headers ================================= ;
+; ============================= Headers ============================ ;
 ; transform numbered list to heading
 
 NumpadDot & Numpad1::
@@ -304,7 +304,7 @@ NumpadDot & 6::{
 	Send "{End}"
 }
 
-; ============================== Colemak layout ============================== ;
+; ========================= Colemak layout ========================= ;
 
 ~RCtrl & RShift::CapsLock
 

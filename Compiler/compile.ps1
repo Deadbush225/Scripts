@@ -16,21 +16,27 @@ Flags:
 
 # Must be the first statement in your script (not counting comments)
 param(
-    [string]$ScriptPath = $pwd,
+    [string]$p_scriptFolder = $pwd,
     [string]$C = "CR",
     [switch]$L,
-    [switch]$AddIcon=false
+    [switch]$AddIcon = $false
 )
 
-$ScriptPath = Get-Item $ScriptPath
+Write-Host $pwd
 
-$scriptFolder = $ScriptPath.FullName
-$scriptName = $ScriptPath.Name # "Spotify Window Manager"
-$ScriptPathWOExtension = $scriptFolder + "\" + $scriptName
-    
+$scriptFolder = (Get-Item $p_scriptFolder)
+
+# $scriptName = $ScriptFolder.Name
+# Write-Host $scriptName
+Write-Host $ScriptFolder.Name
+
+$scriptName = $scriptFolder.Name # "Spotify Window Manager"
+
+$ScriptFolderWOExtension = $scriptFolder.FullName + "\" + $scriptName
+
 $processOptions = @{
     FilePath     = "ahk2exe.exe"
-    ArgumentList = '/in ".\' + $ScriptPathWOExtension + '.ahk' + '/out ".\' + $ScriptPathWOExtension + '.exe"' +  ( $AddIcon ? (' /icon ".\' + $ScriptPathWOExtension + '.ico"') : "")
+    ArgumentList = '/in "' + $ScriptFolderWOExtension + '.ahk" ' + '/out "' + $ScriptFolderWOExtension + '.exe" ' + ( $AddIcon ? (' /icon "' + $ScriptFolderWOExtension + '.ico"') : "")
 }
 
 $iterations = if ($L) { 100 } else { 1 };

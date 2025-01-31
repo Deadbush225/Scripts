@@ -1,9 +1,9 @@
-toggle = 0
+toggle := 0
 #MaxThreadsPerHotkey 2
 
 F9::
     Toggle := !Toggle
-     While Toggle{
+    While Toggle{
         click
         sleep 100
     }
